@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import axios from "axios";
 import "../styles/dashboard.css";
 
 function Dashboard() {
   // 1. Set up state for habits
+const [newHabit, setNewHabit] = useState(""); // For input field
+
 const [habits, setHabits] = useState([
     { id: 1, name: "Drink Water", completed: false },
     { id: 2, name: "Walk 10 minutes", completed: false },
     { id: 3, name: "Stretch", completed: false },
 ]);
+
+useEffect(() => {
+    axios.get("http://localhost:5000/habits")
+    .then(res => setHabits(res.data))
+    .catch(err => console.log(err));
+}, []);
+
 const [selectedMood, setSelectedMood] = useState(null);
 console.log(selectedMood);
   // 2. Toggle habit completion
@@ -17,6 +27,18 @@ const toggleHabit = (id) => {
     habit.id === id ? { ...habit, completed: !habit.completed } : habit
     );
     setHabits(updatedHabits);
+};
+
+const addHabitToServer = () => {
+  if (newHabit.trim() === "") return; // ignore empty input
+
+    axios
+    .post("http://localhost:5000/habits", { name: newHabit })
+    .then((res) => {
+      setHabits([...habits, res.data]); // add habit from backend
+      setNewHabit(""); // clear input
+    })
+    .catch((err) => console.log(err));
 };
 
 const weeklyData = [
@@ -38,23 +60,34 @@ return (
 
       {/* Habits Section */}
     <section className="card habits">
-        <h3>Today’s Habits</h3>
-        <ul>
-        {habits.map((habit) => (
-            <li key={habit.id}>
-            <input
-                type="checkbox"
-                checked={habit.completed}
-                onChange={() => toggleHabit(habit.id)}
-            />
-            <span className={habit.completed ? "completed" : ""}>
-                {habit.name}
-            </span>
-            </li>
-        ))}
-        </ul>
-        <button>Add Habit</button>
-    </section>
+<h3>Today’s Habits</h3>
+<ul>
+    {habits.map((habit) => (
+    <li key={habit.id}>
+        <input
+        type="checkbox"
+        checked={habit.completed}
+        onChange={() => toggleHabit(habit.id)}
+        />
+        <span className={habit.completed ? "completed" : ""}>
+        {habit.name}
+        </span>
+    </li>
+    ))}
+</ul>
+
+  {/* Input + Add Button */}
+<div className="add-habit">
+        <input
+            type="text"
+            placeholder="New habit"
+            value={newHabit}
+            onChange={(e) => setNewHabit(e.target.value)}
+        />
+        <button onClick={addHabitToServer}>Add Habit</button>
+</div>
+</section>
+
     
 
       {/* Mood Section */}

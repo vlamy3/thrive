@@ -83,4 +83,29 @@ transition: transform 0.2s;
     background: #f0f5f4;
     border-radius: 12px;
     padding: 0.5rem;
+}.add-habit {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
+
+.add-habit input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.add-habit button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background-color: #7fb3a6;
+    color: white;
+    cursor: pointer;
+}
+
+.add-habit button:hover {
+    background-color: #6aa395;
+}
+
