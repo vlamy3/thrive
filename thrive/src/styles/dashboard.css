@@ -79,3 +79,8 @@ transition: transform 0.2s;
     padding: 0.2rem;
     background-color: #e6f0ef;
 }
+.chart-placeholder {
+    background: #f0f5f4;
+    border-radius: 12px;
+    padding: 0.5rem;
+}

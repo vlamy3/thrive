@@ -1,5 +1,5 @@
 import { useState } from "react";
-const [selectedMood, setSelectedMood] = useState(null);
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import "../styles/dashboard.css";
 
 function Dashboard() {
@@ -9,7 +9,8 @@ const [habits, setHabits] = useState([
     { id: 2, name: "Walk 10 minutes", completed: false },
     { id: 3, name: "Stretch", completed: false },
 ]);
-
+const [selectedMood, setSelectedMood] = useState(null);
+console.log(selectedMood);
   // 2. Toggle habit completion
 const toggleHabit = (id) => {
     const updatedHabits = habits.map((habit) =>
@@ -17,6 +18,16 @@ const toggleHabit = (id) => {
     );
     setHabits(updatedHabits);
 };
+
+const weeklyData = [
+    { day: "Mon", habitsCompleted: 2 },
+    { day: "Tue", habitsCompleted: 3 },
+    { day: "Wed", habitsCompleted: 2 },
+    { day: "Thu", habitsCompleted: 3 },
+    { day: "Fri", habitsCompleted: 3 },
+    { day: "Sat", habitsCompleted: 1 },
+    { day: "Sun", habitsCompleted: 2 },
+];
 
 return (
     <div className="dashboard">
@@ -74,13 +85,21 @@ return (
 
       {/* Progress Section */}
     <section className="card progress">
-        <h3>Weekly Progress</h3>
-        <div className="chart-placeholder">[ Chart Here ]</div>
-    </section>
+    <h3>Weekly Progress</h3>
+    <div style={{ width: "100%", height: 200 }}>
+        <ResponsiveContainer>
+        <LineChart data={weeklyData} margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Line type="monotone" dataKey="habitsCompleted" stroke="#7fb3a6" strokeWidth={3} />
+        </LineChart>
+        </ResponsiveContainer>
     </div>
-    
-
-);
+</section>
+    </div>
+    );
 }
 
 export default Dashboard;
