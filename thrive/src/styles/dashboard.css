@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: #f6f8f7;
+}
+
+.dashboard {
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+.dashboard-header {
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.habits ul {
+    list-style: none;
+    padding: 0;
+}
+
+.habits li {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+button {
+    margin-top: 1rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #7fb3a6;
+    color: white;
+    cursor: pointer;
+}
+
+.moods span {
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.chart-placeholder {
+    height: 120px;
+    border-radius: 12px;
+    background: #eef2f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
