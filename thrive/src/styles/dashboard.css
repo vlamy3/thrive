@@ -58,3 +58,24 @@ button {
     justify-content: center;
     color: #888;
 }
+.completed {
+    text-decoration: line-through;
+    color: #aaa;
+}
+.moods span {
+font-size: 1.8rem;
+margin-right: 0.5rem;
+cursor: pointer;
+transition: transform 0.2s;
+}
+
+.moods span:hover {
+    transform: scale(1.2);
+}
+
+.mood-selected {
+    border: 2px solid #7fb3a6;
+    border-radius: 50%;
+    padding: 0.2rem;
+    background-color: #e6f0ef;
+}
