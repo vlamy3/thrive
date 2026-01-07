@@ -53,7 +53,7 @@ This project was built to demonstrate full-stack development skills, including a
 
 ### Installation
 ```bash
-git clone https://github.com/your-username/pulse.git
+git clone https://github.com/vlamy3/thrive.git
 cd pulse
 npm install
 
