@@ -10,6 +10,9 @@
 		}
 	],
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "thrive"
+		"liveServer.settings.multiRootWorkspaceName": "thrive",
+		"cSpell.words": [
+			"victoriawebdesigns"
+		]
 	}
 }

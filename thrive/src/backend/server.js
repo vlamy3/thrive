@@ -1,51 +1,80 @@
-/* eslint-disable no-undef */
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-require("dotenv").config();
+// src/backend/server.js
 
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";app.use(cors());
+// Load environment variables
+dotenv.config({ path: "./.env" });
+
+// 1️⃣ Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 5000;
 
+// 2️⃣ Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected"))
-.catch((err) => console.log(err));
+// 3️⃣ MongoDB connection
+mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
 
-// Habit schema
-const habitSchema = new mongoose.Schema({
-    name: String,
-    completed: Boolean,
+// 4️⃣ Define Habit schema + model
+const HabitSchema = new mongoose.Schema({
+  name: String,
+  completed: Boolean,
 });
 
-const Habit = mongoose.model("Habit", habitSchema);
+const Habit = mongoose.model("Habit", HabitSchema);
 
-// Routes
+// 5️⃣ Routes
+
+// Root route (optional, browser friendly)
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
+
+// Get all habits
 app.get("/habits", async (req, res) => {
+  try {
     const habits = await Habit.find();
     res.json(habits);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
+// Add new habit
 app.post("/habits", async (req, res) => {
-    const { name } = req.body;
-    const newHabit = new Habit({ name, completed: false });
-    await newHabit.save();
-    res.json(newHabit);
+  try {
+    const habit = new Habit({
+      name: req.body.name,
+      completed: false,
+    });
+    await habit.save();
+    res.json(habit);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
+// Toggle habit completion
 app.patch("/habits/:id", async (req, res) => {
-    const { id } = req.params;
-    const habit = await Habit.findById(id);
+  try {
+    const habit = await Habit.findById(req.params.id);
+    if (!habit) return res.status(404).json({ error: "Habit not found" });
     habit.completed = !habit.completed;
     await habit.save();
     res.json(habit);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// 6️⃣ Start server
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
