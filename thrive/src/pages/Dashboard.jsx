@@ -5,73 +5,85 @@ import "../styles/dashboard.css";
 
 function Dashboard() {
   // 1️⃣ State
-  const [habits, setHabits] = useState([]);
-  const [newHabit, setNewHabit] = useState("");
+    const [habits, setHabits] = useState([]);
+    const [newHabit, setNewHabit] = useState("");
 
   // 2️⃣ Fetch habits on mount
-  useEffect(() => {
+    useEffect(() => {
     axios
-      .get("http://localhost:5000/habits")
-      .then((res) => setHabits(res.data))
-      .catch((err) => console.error("Error fetching habits:", err));
-  }, []);
+        .get("http://localhost:5000/habits")
+        .then((res) => setHabits(res.data))
+        .catch((err) => console.error("Error fetching habits:", err));
+    }, []);
 
   // 3️⃣ Toggle habit completion
-  const toggleHabit = (id) => {
+    const toggleHabit = (id) => {
     axios
-      .patch(`http://localhost:5000/habits/${id}`)
-      .then((res) => {
+        .patch(`http://localhost:5000/habits/${id}`)
+        .then((res) => {
         setHabits(habits.map((h) => (h._id === id ? res.data : h)));
-      })
-      .catch((err) => console.error("Error toggling habit:", err));
-  };
+        })
+        .catch((err) => console.error("Error toggling habit:", err));
+    };
+
+  // 3b️⃣ Delete habit
+    const deleteHabit = (id) => {
+    axios
+        .delete(`http://localhost:5000/habits/${id}`)
+        .then(() => {
+        setHabits(habits.filter((h) => h._id !== id));
+        })
+        .catch((err) => console.error("Error deleting habit:", err));
+    };
 
   // 4️⃣ Render
-  return (
+    return (
     <section className="card habits">
-      <h3>Today’s Habits</h3>
+        <h3>Today’s Habits</h3>
 
-      <ul>
+        <ul>
         {habits.map((habit) => (
-          <li key={habit._id}>
+            <li key={habit._id}>
             <input
-              type="checkbox"
-              checked={habit.completed}
-              onChange={() => toggleHabit(habit._id)}
+                type="checkbox"
+                checked={habit.completed}
+                onChange={() => toggleHabit(habit._id)}
             />
             <span className={habit.completed ? "completed" : ""}>
-              {habit.name}
+                {habit.name}
             </span>
-          </li>
+            {/* Optional Delete button */}
+            <button onClick={() => deleteHabit(habit._id)}>Delete</button>
+            </li>
         ))}
-      </ul>
+        </ul>
 
       {/* Add Habit */}
-      <div className="add-habit">
+        <div className="add-habit">
         <input
-          type="text"
-          placeholder="New habit"
-          value={newHabit}
-          onChange={(e) => setNewHabit(e.target.value)}
+            type="text"
+            placeholder="New habit"
+            value={newHabit}
+            onChange={(e) => setNewHabit(e.target.value)}
         />
         <button
-          onClick={() => {
+            onClick={() => {
             if (newHabit.trim() === "") return;
 
             axios
-              .post("http://localhost:5000/habits", { name: newHabit })
-              .then((res) => {
+                .post("http://localhost:5000/habits", { name: newHabit })
+                .then((res) => {
                 setHabits([...habits, res.data]);
                 setNewHabit("");
-              })
-              .catch((err) => console.error("Error adding habit:", err));
-          }}
+                })
+                .catch((err) => console.error("Error adding habit:", err));
+            }}
         >
-          Add Habit
+            Add Habit
         </button>
-      </div>
+        </div>
     </section>
-  );
+    );
 }
 
 export default Dashboard;
